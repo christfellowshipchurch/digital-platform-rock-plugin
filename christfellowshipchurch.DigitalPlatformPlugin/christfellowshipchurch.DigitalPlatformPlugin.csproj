@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{35A97173-6961-4702-A7E0-9E195C9BC041}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>christfellowshipchurch.DigitalPlatformPlugin</RootNamespace>
+    <AssemblyName>christfellowshipchurch.DigitalPlatformPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\christfellowshipchurch.DigitalPlatformPlugin.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\christfellowshipchurch.DigitalPlatformPlugin.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Rest\ChristFellowshipDigitalPlatformController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Rock">
+      <HintPath>..\Local Rock\RockWeb\Bin\Rock.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock.Rest">
+      <HintPath>..\Local Rock\RockWeb\Bin\Rock.Rest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\Local Rock\RockWeb\Bin\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData">
+      <HintPath>..\Local Rock\RockWeb\Bin\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TextTemplating\Microsoft.TextTemplating.targets" />
+  <!-- ******************************************************************** -->
+  <!-- Get the path to the project assembly                                 -->
+  <!-- ******************************************************************** -->
+  <PropertyGroup>
+    <TheAssembly>$(OutputPath)christfellowshipchurch.DigitalPlatformPlugin.dll</TheAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PluginName>christfellowshipchurch.DigitalPlatformPlugin</PluginName>
+  </PropertyGroup>
+  <Target Name="UpdateAssemblyVersion" BeforeTargets="CoreBuild" Condition="'$(Configuration)' == 'Release'">
+    <Message Importance="High" Text="Automatically updated assembly version." />
+  </Target>
+  <Target Name="PackagePlugin" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <!-- Read the version number from the assembly -->
+    <GetAssemblyIdentity AssemblyFiles="$(TheAssembly)">
+      <Output TaskParameter="Assemblies" ItemName="TheVersion" />
+    </GetAssemblyIdentity>
+    <MakeDir Directories="$(ProjectDir)Packaging" Condition="!Exists('$(ProjectDir)Packaging')" />
+    <Message Importance="High" Text="Packaging version: %(TheVersion.Version)" />
+    <!-- Zip it real good -->
+    <!-- ******************************************************************** -->
+    <!-- Zip it                                                               -->
+    <!-- Unfortunately, the powershell Compress-Archive is not compatible     -->
+    <!-- with Rock's RockShop installer, so you have to manually zip it.      -->
+    <!-- ******************************************************************** -->
+    <Exec Command="echo &quot;%(TheVersion.Version)&quot; &gt; .version " />
+    <Exec Command="xcopy &quot;.version&quot; $(ProjectDir)Packaging\temp\install\ /y /i" />
+    <Exec Command="xcopy &quot;.version&quot; $(ProjectDir)Packaging\temp\uninstall\ /y /i" />
+    <Exec Command="xcopy &quot;$(OutputPath)christfellowshipchurch.DigitalPlatformPlugin.dll&quot; $(ProjectDir)Packaging\temp\content\bin\ /y /i" />
+    <Exec Command="xcopy &quot;$(OutputPath)christfellowshipchurch.DigitalPlatformPlugin.xml&quot; $(ProjectDir)Packaging\temp\content\bin\ /y /i" />
+    <Message Importance="High" Text="Zipping to $(ProjectDir)Packaging\$(PluginName).%(TheVersion.Version).zip" />
+    <Exec Command="(powershell Compress-Archive -CompressionLevel NoCompression -Path $(ProjectDir)Packaging\temp\* -DestinationPath '$(ProjectDir)Packaging\$(PluginName).%(TheVersion.Version).REZIP_AND_RENAME_PLUGIN.zip' -Force)" />
+    <Exec Command="REM ren &quot;$(ProjectDir)Packaging\$(PluginName).%(TheVersion.Version).zip&quot; &quot;$(PluginName).%(TheVersion.Version).plugin&quot;" />
+    <Exec Command="REM rmdir $(ProjectDir)Packaging\temp /s /q" />
+    <Message Importance="High" Text="IMPORTANT! Actually, you need to do that step by re-zipping up everything under $(ProjectDir)Packaging\temp\ USING REGULAR COMPRESS, then rename it to .plugin, and move under the ..\X.Y.Z folder." />
+  </Target>
+</Project>
