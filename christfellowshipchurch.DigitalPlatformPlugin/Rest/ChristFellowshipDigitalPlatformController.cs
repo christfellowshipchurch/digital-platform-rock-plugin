@@ -19,12 +19,16 @@ namespace christfellowshipchurch.DigitalPlatformPlugin.Rest
 {
     public class ChristFellowshipDigitalPlatformController : ApiControllerBase
     {
-
+        /// <summary>
+        /// A test method to check and see if this thing works
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [HttpGet]
         [EnableQuery]
         [Authenticate, Secured]
         [System.Web.Http.Route("api/ChristFellowshipDigitalPlatform/test")]
-        public String Test( string input )
+        public string Test( string input )
         {
             return input;
         }

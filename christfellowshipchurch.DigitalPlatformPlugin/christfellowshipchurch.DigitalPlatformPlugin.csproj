@@ -37,17 +37,30 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Rock">
-      <HintPath>..\Local Rock\RockWeb\Bin\Rock.dll</HintPath>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Local Rock\RockWeb\Bin\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Rock.Rest">
-      <HintPath>..\Local Rock\RockWeb\Bin\Rock.Rest.dll</HintPath>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Rock, Version=1.14.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Local Rock\RockWeb\Bin\Rock.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\Local Rock\RockWeb\Bin\System.Web.Http.dll</HintPath>
+    <Reference Include="Rock.Rest, Version=1.14.0.7, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Local Rock\RockWeb\Bin\Rock.Rest.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Http.OData">
-      <HintPath>..\Local Rock\RockWeb\Bin\System.Web.Http.OData.dll</HintPath>
+    <Reference Include="System" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Local Rock\RockWeb\Bin\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Local Rock\RockWeb\Bin\System.Web.Http.OData.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
