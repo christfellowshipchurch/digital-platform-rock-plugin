@@ -43,7 +43,7 @@ namespace christfellowshipchurch.DigitalPlatformPlugin.Rest
         [HttpGet]
         [EnableQuery]
         [Authenticate, Secured]
-        [System.Web.Http.Route("api/ChristFellowshipDigitalPlatform/Schedule/ParseDates/{scheduleId}")]
+        [System.Web.Http.Route("api/ChristFellowshipDigitalPlatform/Schedules/ParseDates/{scheduleId}")]
         public ScheduleOccurrence[] ScheduleDates(int scheduleId, DateTime? startTime = null, DateTime? endTime = null)
         {
             var rockContext = new RockContext();
